@@ -9,7 +9,6 @@ using JustMeetWebService.Models;
 
 namespace JustMeetWebService.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class LocationsController : ControllerBase
     {
@@ -21,6 +20,7 @@ namespace JustMeetWebService.Controllers
         }
 
         // GET: api/Locations
+        [Route("api/locations")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
         {
@@ -32,7 +32,8 @@ namespace JustMeetWebService.Controllers
         }
 
         // GET: api/Locations/5
-        [HttpGet("{id}")]
+        [Route("api/location/{id}")]
+        [HttpGet()]
         public async Task<ActionResult<Location>> GetLocation(int id)
         {
           if (_context.Locations == null)
@@ -51,7 +52,8 @@ namespace JustMeetWebService.Controllers
 
         // PUT: api/Locations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [Route("api/location/{id}")]
+        [HttpPut()]
         public async Task<IActionResult> PutLocation(int id, Location location)
         {
             if (id != location.IdLocation)
@@ -82,6 +84,7 @@ namespace JustMeetWebService.Controllers
 
         // POST: api/Locations
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Route("api/location")]
         [HttpPost]
         public async Task<ActionResult<Location>> PostLocation(Location location)
         {
@@ -96,7 +99,8 @@ namespace JustMeetWebService.Controllers
         }
 
         // DELETE: api/Locations/5
-        [HttpDelete("{id}")]
+        [Route("api/location/{id}")]
+        [HttpDelete()]
         public async Task<IActionResult> DeleteLocation(int id)
         {
             if (_context.Locations == null)
