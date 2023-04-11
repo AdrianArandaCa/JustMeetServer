@@ -24,10 +24,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Answer>>> GetAnswers()
         {
-          if (_context.Answers == null)
-          {
-              return NotFound();
-          }
+            if (_context.Answers == null)
+            {
+                return NotFound();
+            }
             return await _context.Answers.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet()]
         public async Task<ActionResult<Answer>> GetAnswer(int id)
         {
-          if (_context.Answers == null)
-          {
-              return NotFound();
-          }
+            if (_context.Answers == null)
+            {
+                return NotFound();
+            }
             var answer = await _context.Answers.FindAsync(id);
 
             if (answer == null)
@@ -88,10 +88,10 @@ namespace JustMeetWebService.Controllers
         [HttpPost]
         public async Task<ActionResult<Answer>> PostAnswer(Answer answer)
         {
-          if (_context.Answers == null)
-          {
-              return Problem("Entity set 'JustmeetContext.Answers'  is null.");
-          }
+            if (_context.Answers == null)
+            {
+                return Problem("Entity set 'JustmeetContext.Answers'  is null.");
+            }
             _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
 

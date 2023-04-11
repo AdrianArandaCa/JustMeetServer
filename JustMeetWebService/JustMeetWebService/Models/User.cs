@@ -29,5 +29,5 @@ public partial class User
 
     public virtual ICollection<Location> Locations { get; set; } = new List<Location>();
 
-    public virtual ICollection<Game> IdGames { get; set; } = new List<Game>();
+    public virtual ICollection<UserGame> UserGames { get; set; } = new List<UserGame>();
 }

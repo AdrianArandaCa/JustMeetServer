@@ -11,7 +11,7 @@ public partial class Game
 
     public bool? Match { get; set; }
 
-    public virtual ICollection<Question> IdQuestions { get; set; } = new List<Question>();
+    public virtual ICollection<UserGame> UserGames { get; set; } = new List<UserGame>();
 
-    public virtual ICollection<User> IdUsers { get; set; } = new List<User>();
+    public virtual ICollection<Question> IdQuestions { get; set; } = new List<Question>();
 }

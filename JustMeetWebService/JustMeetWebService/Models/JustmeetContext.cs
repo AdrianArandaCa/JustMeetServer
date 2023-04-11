@@ -29,6 +29,10 @@ public partial class JustmeetContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserAnswer> UserAnswers { get; set; }
+
+    public virtual DbSet<UserGame> UserGames { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=.; Trusted_Connection=True; Encrypt=false; Database=Justmeet");
@@ -43,7 +47,6 @@ public partial class JustmeetContext : DbContext
 
             entity.Property(e => e.IdAnswer).HasColumnName("idAnswer");
             entity.Property(e => e.Answer1).HasColumnName("answer");
-            entity.Property(e => e.Selected).HasColumnName("selected");
         });
 
         modelBuilder.Entity<Game>(entity =>
@@ -77,25 +80,6 @@ public partial class JustmeetContext : DbContext
                         j.ToTable("QuestionGame");
                         j.IndexerProperty<int>("IdGame").HasColumnName("idGame");
                         j.IndexerProperty<int>("IdQuestion").HasColumnName("idQuestion");
-                    });
-
-            entity.HasMany(d => d.IdUsers).WithMany(p => p.IdGames)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserGame",
-                    r => r.HasOne<User>().WithMany()
-                        .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_UserGame_User"),
-                    l => l.HasOne<Game>().WithMany()
-                        .HasForeignKey("IdGame")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_UserGame_Game"),
-                    j =>
-                    {
-                        j.HasKey("IdGame", "IdUser");
-                        j.ToTable("UserGame");
-                        j.IndexerProperty<int>("IdGame").HasColumnName("idGame");
-                        j.IndexerProperty<int>("IdUser").HasColumnName("idUser");
                     });
         });
 
@@ -140,7 +124,6 @@ public partial class JustmeetContext : DbContext
 
             entity.HasOne(d => d.IdGametypeNavigation).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.IdGametype)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Question_Gametype");
 
             entity.HasMany(d => d.IdAnswers).WithMany(p => p.IdQuestions)
@@ -224,6 +207,52 @@ public partial class JustmeetContext : DbContext
             entity.HasOne(d => d.IdSettingNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdSetting)
                 .HasConstraintName("FK_User_Setting");
+        });
+
+        modelBuilder.Entity<UserAnswer>(entity =>
+        {
+            entity.HasKey(e => new { e.IdGame, e.IdUser, e.IdQuestion }).HasName("PK__userAnsw__F46447F736BC0361");
+
+            entity.ToTable("userAnswer");
+
+            entity.Property(e => e.IdGame).HasColumnName("idGame");
+            entity.Property(e => e.IdUser).HasColumnName("idUser");
+            entity.Property(e => e.IdQuestion).HasColumnName("idQuestion");
+            entity.Property(e => e.IdAnswer).HasColumnName("idAnswer");
+
+            entity.HasOne(d => d.IdAnswerNavigation).WithMany(p => p.UserAnswers)
+                .HasForeignKey(d => d.IdAnswer)
+                .HasConstraintName("FK__userAnswe__idAns__628FA481");
+
+            entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.UserAnswers)
+                .HasForeignKey(d => d.IdQuestion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__userAnswe__idQue__619B8048");
+
+            entity.HasOne(d => d.Id).WithMany(p => p.UserAnswers)
+                .HasForeignKey(d => new { d.IdGame, d.IdUser })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_userAnswer_UserGame");
+        });
+
+        modelBuilder.Entity<UserGame>(entity =>
+        {
+            entity.HasKey(e => new { e.IdGame, e.IdUser });
+
+            entity.ToTable("UserGame");
+
+            entity.Property(e => e.IdGame).HasColumnName("idGame");
+            entity.Property(e => e.IdUser).HasColumnName("idUser");
+
+            entity.HasOne(d => d.IdGameNavigation).WithMany(p => p.UserGames)
+                .HasForeignKey(d => d.IdGame)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserGame_Game");
+
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserGames)
+                .HasForeignKey(d => d.IdUser)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserGame_User");
         });
 
         OnModelCreatingPartial(modelBuilder);
