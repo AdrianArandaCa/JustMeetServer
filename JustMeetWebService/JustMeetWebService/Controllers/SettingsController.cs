@@ -20,7 +20,7 @@ namespace JustMeetWebService.Controllers
         }
 
         // GET: api/Settings
-        [Route("api/settings/")]
+        [Route("api/settings")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Setting>>> GetSettings()
         {
