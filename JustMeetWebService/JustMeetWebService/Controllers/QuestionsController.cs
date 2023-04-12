@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using JustMeetWebService.Models;
+using NuGet.Packaging;
 
 namespace JustMeetWebService.Controllers
 {
@@ -41,6 +42,8 @@ namespace JustMeetWebService.Controllers
               return NotFound();
           }
             var question = await _context.Questions.FindAsync(id);
+            //List<Answer> answers = GetQuestionWithAnswer(id);
+            //question.IdAnswers.AddRange(GetQuestionWithAnswer(id));
 
             if (question == null)
             {
@@ -48,6 +51,25 @@ namespace JustMeetWebService.Controllers
             }
 
             return question;
+        }
+
+        // GET: api/Questions/5
+        [Route("api/questionWithAnswer/{id}")]
+        [HttpGet()]
+        public async Task<ActionResult<List<Answer>>> GetQuestionWithAnswer(int id)
+        {
+            if (_context.Questions == null)
+            {
+                return NotFound();
+            }
+            var answers = await _context.Questions.Where(a => a.IdQuestion == id).SelectMany(a => a.IdAnswers).ToListAsync();
+
+            //if (question == null)
+            //{
+            //    return NotFound();
+            //}
+
+            return answers;
         }
 
         // PUT: api/Questions/5
