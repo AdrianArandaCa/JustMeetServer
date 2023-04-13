@@ -25,10 +25,20 @@ namespace JustMeetWebService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
         {
-          if (_context.Questions == null)
-          {
-              return NotFound();
-          }
+            List<Question> questions = null;
+            if (_context.Questions == null)
+            {
+                return NotFound();
+            }
+            questions = await _context.Questions.ToListAsync();
+            for (var i = 0; i < questions.Count; i++)
+            {
+                if (questions[i].IdQuestion != null) 
+                {
+                    var result = await GetQuestionWithAnswer(questions[i].IdQuestion);
+                    questions[i].IdAnswers = result.Value;
+                }
+            }
             return await _context.Questions.ToListAsync();
         }
 
@@ -37,13 +47,11 @@ namespace JustMeetWebService.Controllers
         [HttpGet()]
         public async Task<ActionResult<Question>> GetQuestion(int id)
         {
-          if (_context.Questions == null)
-          {
-              return NotFound();
-          }
+            if (_context.Questions == null)
+            {
+                return NotFound();
+            }
             var question = await _context.Questions.FindAsync(id);
-            //List<Answer> answers = GetQuestionWithAnswer(id);
-            //question.IdAnswers.AddRange(GetQuestionWithAnswer(id));
 
             if (question == null)
             {
@@ -110,10 +118,10 @@ namespace JustMeetWebService.Controllers
         [HttpPost]
         public async Task<ActionResult<Question>> PostQuestion(Question question)
         {
-          if (_context.Questions == null)
-          {
-              return Problem("Entity set 'JustmeetContext.Questions'  is null.");
-          }
+            if (_context.Questions == null)
+            {
+                return Problem("Entity set 'JustmeetContext.Questions'  is null.");
+            }
             _context.Questions.Add(question);
             await _context.SaveChangesAsync();
 

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using JustMeetWebService.Models;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace JustMeetWebService.Controllers
 {
@@ -41,13 +43,61 @@ namespace JustMeetWebService.Controllers
               return NotFound();
           }
             var user = await _context.Users.FindAsync(id);
+            if (user.IdSetting != null) 
+            {
+                var setting = await GetUserSetting((int)user.IdSetting);
+                user.IdSettingNavigation = setting.Value;
+            }
+            
 
             if (user == null)
             {
                 return NotFound();
             }
-
             return user;
+        }
+
+        // GET: api/UserSetting/5
+        [Route("api/userSetting/{id}")]
+        [HttpGet()]
+        public async Task<ActionResult<Setting>> GetUserSetting(int id)
+        {
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+            var setting = await _context.Settings.Where(a=>a.IdSetting == id).FirstOrDefaultAsync();
+            if (setting.IdGametype != null) 
+            {
+                var gameType = await GetUserSettingGameType((int)setting.IdGametype);
+                setting.IdGametypeNavigation = gameType.Value;
+            }
+            
+            if (setting == null)
+            {
+                return NotFound();
+            }
+
+            return setting;
+        }
+
+        // GET: api/UserSetting/5
+        [Route("api/userSettingGameType/{id}")]
+        [HttpGet()]
+        public async Task<ActionResult<Gametype>> GetUserSettingGameType(int idUser)
+        {
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+            var gameType = await _context.Users.Where(a => a.IdUser == idUser).Select(a => a.IdSettingNavigation.IdGametypeNavigation).FirstOrDefaultAsync();
+
+            if (gameType == null)
+            {
+                return NotFound();
+            }
+
+            return gameType;
         }
 
         // PUT: api/Users/5
@@ -92,7 +142,14 @@ namespace JustMeetWebService.Controllers
           {
               return Problem("Entity set 'JustmeetContext.Users'  is null.");
           }
+            var existUser = _context.Users.Where(a => a.Name.Equals(user.Name)).FirstOrDefault();
+            if (existUser != null) 
+            {
+                return BadRequest(new { message = "Usuari ja existeix" });
+            }
+            
             _context.Users.Add(user);
+            
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.IdUser }, user);
