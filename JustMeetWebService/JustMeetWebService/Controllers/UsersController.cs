@@ -43,17 +43,39 @@ namespace JustMeetWebService.Controllers
               return NotFound();
           }
             var user = await _context.Users.FindAsync(id);
-            if (user.IdSetting != null) 
+            if (user.IdSetting != null)
             {
                 var setting = await GetUserSetting((int)user.IdSetting);
                 user.IdSettingNavigation = setting.Value;
             }
-            
-
             if (user == null)
             {
                 return NotFound();
             }
+
+            return user;
+        }
+
+        // GET: api/Users/Adrian
+        [Route("api/userByName/{name}")]
+        [HttpGet()]
+        public async Task<ActionResult<User>> GetUserByName(string name)
+        {
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+            var user = await _context.Users.Where(a=>a.Name.Equals(name)).FirstOrDefaultAsync();
+            if (user.IdSetting != null)
+            {
+                var setting = await GetUserSetting((int)user.IdSetting);
+                user.IdSettingNavigation = setting.Value;
+            }
+            if (user == null)
+            {
+                return NotFound();
+            }
+
             return user;
         }
 
@@ -142,8 +164,8 @@ namespace JustMeetWebService.Controllers
           {
               return Problem("Entity set 'JustmeetContext.Users'  is null.");
           }
-            var existUser = _context.Users.Where(a => a.Name.Equals(user.Name)).FirstOrDefault();
-            if (existUser != null) 
+            //var existUser = _context.Users.Where(a => a.Name.Equals(user.Name)).FirstOrDefault();
+            if (UserExists(user.IdUser)) 
             {
                 return BadRequest(new { message = "Usuari ja existeix" });
             }

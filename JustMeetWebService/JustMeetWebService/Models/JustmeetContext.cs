@@ -47,6 +47,9 @@ public partial class JustmeetContext : DbContext
 
             entity.Property(e => e.IdAnswer).HasColumnName("idAnswer");
             entity.Property(e => e.Answer1).HasColumnName("answer");
+            entity.Property(e => e.Selected)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("selected");
         });
 
         modelBuilder.Entity<Game>(entity =>
@@ -202,7 +205,9 @@ public partial class JustmeetContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("password");
             entity.Property(e => e.Photo).HasColumnName("photo");
-            entity.Property(e => e.Premium).HasColumnName("premium");
+            entity.Property(e => e.Premium)
+                .HasDefaultValueSql("('false')")
+                .HasColumnName("premium");
 
             entity.HasOne(d => d.IdSettingNavigation).WithMany(p => p.Users)
                 .HasForeignKey(d => d.IdSetting)
