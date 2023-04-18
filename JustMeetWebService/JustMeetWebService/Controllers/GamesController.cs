@@ -86,16 +86,17 @@ namespace JustMeetWebService.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Route("api/game")]
         [HttpPost]
-        public async Task<ActionResult<Game>> PostGame(Game game)
+        public async Task<Game> PostGame(Game game)
         {
           if (_context.Games == null)
           {
-              return Problem("Entity set 'JustmeetContext.Games'  is null.");
+              //return Problem("Entity set 'JustmeetContext.Games'  is null.");
           }
             _context.Games.Add(game);
             await _context.SaveChangesAsync();
+            game = await _context.Games.OrderByDescending(a=>a.IdGame).FirstOrDefaultAsync();
 
-            return CreatedAtAction("GetGame", new { id = game.IdGame }, game);
+            return game;
         }
 
         // DELETE: api/Games/5

@@ -62,7 +62,7 @@ namespace JustMeetWebService.Controllers
         }
 
         // GET: api/Questions/5
-        [Route("api/questionWithAnswer/{id}")]
+        [Route("api/questionWithAnswer/{id}")]  
         [HttpGet()]
         public async Task<ActionResult<List<Answer>>> GetQuestionWithAnswer(int id)
         {

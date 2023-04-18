@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace JustMeetWebService.Models;
 
@@ -12,10 +13,10 @@ public partial class UserAnswer
     public int IdQuestion { get; set; }
 
     public int? IdAnswer { get; set; }
-
-    public virtual UserGame Id { get; set; } = null!;
-
+    [JsonIgnore]
+    public virtual UserGame? Id { get; set; } = null!;
+    [JsonIgnore]
     public virtual Answer? IdAnswerNavigation { get; set; }
-
-    public virtual Question IdQuestionNavigation { get; set; } = null!;
+    [JsonIgnore]
+    public virtual Question? IdQuestionNavigation { get; set; } = null!;
 }

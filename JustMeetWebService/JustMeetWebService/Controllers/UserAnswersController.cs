@@ -146,6 +146,51 @@ namespace JustMeetWebService.Controllers
             return CreatedAtAction("GetUserAnswer", new { id = userAnswer.IdGame }, userAnswer);
         }
 
+        // POST: api/UserAnswers
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Route("api/listUserAnswer")]
+        [HttpPost]
+        public async Task<ActionResult<List<UserAnswer>>> PostListUserAnswer(List<UserAnswer> listUserAnswer)
+        {
+            if (_context.UserAnswers == null)
+            {
+                return Problem("Entity set 'JustmeetContext.UserAnswers'  is null.");
+            }
+            _context.UserGames.Add(new UserGame(listUserAnswer.First().IdGame, listUserAnswer.First().IdUser));
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                
+            }
+
+            foreach (var userAnswer in listUserAnswer) {
+                
+                _context.UserAnswers.Add(userAnswer);
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                foreach (var userAnswer in listUserAnswer) {
+                    if (UserAnswerExists(userAnswer.IdGame, userAnswer.IdUser, userAnswer.IdQuestion))
+                    {
+                        return Conflict();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return CreatedAtAction("GetUserAnswer", listUserAnswer);
+        }
+
         // DELETE: api/UserAnswers/5
         [Route("api/userAnswer/{idUser}/{idGame}")]
         [HttpDelete()]
