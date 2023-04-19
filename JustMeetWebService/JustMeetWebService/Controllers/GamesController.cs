@@ -50,6 +50,25 @@ namespace JustMeetWebService.Controllers
             return game;
         }
 
+        // GET: api/Games/5
+        [Route("api/usersFromGame/{id}")]
+        [HttpGet()]
+        public async Task<ActionResult<List<User>>> GetUsersFromGame(int id)
+        {
+            if (_context.Games == null)
+            {
+                return NotFound();
+            }
+            List<User> users = await _context.Games.Where(a=>a.IdGame == id).SelectMany(a=>a.UserGames).Select(a=>a.IdUserNavigation).ToListAsync();
+
+            if (users == null)
+            {
+                return NotFound();
+            }
+
+            return users;
+        }
+
         // PUT: api/Games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Route("api/game/{id}")]

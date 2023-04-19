@@ -62,6 +62,9 @@ public partial class JustmeetContext : DbContext
             entity.Property(e => e.Match)
                 .HasDefaultValueSql("((0))")
                 .HasColumnName("match");
+            entity.Property(e => e.Percentage)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("percentage");
             entity.Property(e => e.RegistrationDate)
                 .HasColumnType("date")
                 .HasColumnName("registrationDate");

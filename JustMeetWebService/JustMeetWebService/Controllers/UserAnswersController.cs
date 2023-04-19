@@ -33,22 +33,22 @@ namespace JustMeetWebService.Controllers
         }
 
         // GET: api/UserAnswersForUser/5
-        [Route("api/userAnswer/{idUser}/{idGame}")]
+        [Route("api/userAnswerFromGame/{idGame}")]
         [HttpGet()]
-        public async Task<ActionResult<UserAnswer>> GetUserAnswerForUser(int idGame, int idUser)
+        public async Task<ActionResult<List<UserAnswer>>> GetUserAnswerFromGame(int idGame)
         {
             if (_context.UserAnswers == null)
             {
                 return NotFound();
             }
-            var userAnswer = await _context.UserAnswers.FindAsync(idGame, idUser);
+            var listUserAnswer = await _context.UserAnswers.Where(a=>a.IdGame == idGame).ToListAsync();
 
-            if (userAnswer == null)
+            if (listUserAnswer == null)
             {
                 return NotFound();
             }
 
-            return userAnswer;
+            return listUserAnswer;
         }
 
         // GET: api/UserAnswersForUser/5
@@ -116,7 +116,7 @@ namespace JustMeetWebService.Controllers
             return NoContent();
         }
 
-        // POST: api/UserAnswers
+        // POST: api/UserAnswers    
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Route("api/userAnswer")]
         [HttpPost]

@@ -11,6 +11,8 @@ public partial class Game
     public DateTime? RegistrationDate { get; set; }
 
     public bool? Match { get; set; }
+
+    public double? Percentage { get; set; }
     [JsonIgnore]
     public virtual ICollection<UserGame> UserGames { get; set; } = new List<UserGame>();
     [JsonIgnore]
