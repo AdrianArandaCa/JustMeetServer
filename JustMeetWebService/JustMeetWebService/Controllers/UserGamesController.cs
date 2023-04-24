@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using JustMeetWebService.Models;
+using Microsoft.VisualBasic;
 
 namespace JustMeetWebService.Controllers
 {
@@ -42,6 +43,35 @@ namespace JustMeetWebService.Controllers
           }
             var userGame = await _context.UserGames.FindAsync(id);
 
+            if (userGame == null)
+            {
+                return NotFound();
+            }
+
+            return userGame;
+        }
+
+        // GET: api/UserGames/5
+        [Route("api/userGameList/{idUser}")]
+        [HttpGet()]
+        public async Task<ActionResult<List<User>>> GetUserGameList(int idUser)
+        {
+            List<User> userGame = new List<User>();
+            if (_context.UserGames == null)
+            {
+                return NotFound();
+            }
+            List<Game> listGame = await _context.UserGames.Where(a => a.IdUser == idUser).Select(a => a.IdGameNavigation).Where(a=>a.Match == true).ToListAsync();
+            if (listGame != null) {
+                foreach (var game in listGame)
+                {
+                    User user = await _context.UserGames.Where(a => a.IdGame == game.IdGame && a.IdUser != idUser).Select(a => a.IdUserNavigation).Distinct().FirstOrDefaultAsync();
+                    if (!userGame.Contains(user)) {
+                        userGame.Add(user);
+                    }
+                }
+            }
+            
             if (userGame == null)
             {
                 return NotFound();

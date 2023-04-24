@@ -14,9 +14,9 @@ public partial class UserAnswer
 
     public int? IdAnswer { get; set; }
     [JsonIgnore]
-    public virtual UserGame Id { get; set; } = null!;
+    public virtual UserGame? Id { get; set; } = null!;
     [JsonIgnore]
     public virtual Answer? IdAnswerNavigation { get; set; }
     [JsonIgnore]
-    public virtual Question IdQuestionNavigation { get; set; } = null!;
+    public virtual Question? IdQuestionNavigation { get; set; } = null!;
 }
