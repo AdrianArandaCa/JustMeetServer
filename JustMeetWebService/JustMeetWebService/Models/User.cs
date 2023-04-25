@@ -14,7 +14,7 @@ public partial class User
 
     public string? Email { get; set; }
 
-    public string? Birthday { get; set; }
+    public int? Birthday { get; set; }
 
     public string? Genre { get; set; }
 
