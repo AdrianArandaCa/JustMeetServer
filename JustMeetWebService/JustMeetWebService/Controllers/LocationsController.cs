@@ -50,12 +50,31 @@ namespace JustMeetWebService.Controllers
             return location;
         }
 
+        [Route("api/locationByUser/{id}")]
+        [HttpGet()]
+        public async Task<ActionResult<Location>> GetLocationByUser(int id)
+        {
+            if (_context.Locations == null)
+            {
+                return NotFound();
+            }
+            var location = await _context.Locations.Where(a=>a.IdUser == id).FirstOrDefaultAsync();
+
+            if (location == null)
+            {
+                return NotFound();
+            }
+
+            return location;
+        }
+
         // PUT: api/Locations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Route("api/location/{id}")]
         [HttpPut()]
         public async Task<IActionResult> PutLocation(int id, Location location)
         {
+            
             if (id != location.IdLocation)
             {
                 return BadRequest();

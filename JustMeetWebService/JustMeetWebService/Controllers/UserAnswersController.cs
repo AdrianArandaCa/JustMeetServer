@@ -192,7 +192,7 @@ namespace JustMeetWebService.Controllers
         }
 
         // DELETE: api/UserAnswers/5
-        [Route("api/userAnswer/{idUser}/{idGame}")]
+        [Route("api/userAnswer/{idGame}")]
         [HttpDelete()]
         public async Task<IActionResult> DeleteUserAnswer(int id)
         {
