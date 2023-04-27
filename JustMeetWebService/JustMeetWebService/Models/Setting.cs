@@ -19,6 +19,7 @@ public partial class Setting
     public int? IdGametype { get; set; }
 
     public virtual Gametype? IdGametypeNavigation { get; set; }
+
     [JsonIgnore]
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

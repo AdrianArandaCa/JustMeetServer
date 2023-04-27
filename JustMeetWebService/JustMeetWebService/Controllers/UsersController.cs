@@ -106,13 +106,13 @@ namespace JustMeetWebService.Controllers
         // GET: api/UserSetting/5
         [Route("api/userSettingGameType/{id}")]
         [HttpGet()]
-        public async Task<ActionResult<Gametype>> GetUserSettingGameType(int idUser)
+        public async Task<ActionResult<Gametype>> GetUserSettingGameType(int id)
         {
             if (_context.Users == null)
             {
                 return NotFound();
             }
-            var gameType = await _context.Users.Where(a => a.IdUser == idUser).Select(a => a.IdSettingNavigation.IdGametypeNavigation).FirstOrDefaultAsync();
+            var gameType = await _context.Gametypes.Where(a => a.IdGametype== id).FirstOrDefaultAsync();
 
             if (gameType == null)
             {
