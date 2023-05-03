@@ -66,11 +66,14 @@ namespace JustMeetWebService.Controllers
                 return NotFound();
             }
             var user = await _context.Users.Where(a=>a.Name.Equals(name)).FirstOrDefaultAsync();
-            if (user.IdSetting != null)
-            {
-                var setting = await GetUserSetting((int)user.IdSetting);
-                user.IdSettingNavigation = setting.Value;
+            if (user != null) {
+                if (user.IdSetting != null)
+                {
+                    var setting = await GetUserSetting((int)user.IdSetting);
+                    user.IdSettingNavigation = setting.Value;
+                }
             }
+            
             if (user == null)
             {
                 return NotFound();
