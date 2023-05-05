@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using JustMeetWebService.Models;
 using System.Transactions;
+using Microsoft.AspNetCore.Identity;
 
 namespace JustMeetWebService.Controllers
 {
@@ -30,6 +31,23 @@ namespace JustMeetWebService.Controllers
               return NotFound();
           }
             return await _context.UserAnswers.ToListAsync();
+        }
+        
+        // GET: api/UserAnswers
+        [Route("api/userAnswer/{idGame}/{idUser}/{idQuestion}")]
+        [HttpGet]
+        public async Task<ActionResult<UserAnswer>> GetUserAnswer(int idGame, int idUser, int idQuestion)
+        {
+          if (_context.UserAnswers == null)
+          {
+              return NotFound();
+          }
+            var userAnswer = await _context.UserAnswers.Where(a => a.IdGame == idGame && a.IdUser == idUser && a.IdQuestion == idQuestion).FirstOrDefaultAsync();
+            if (userAnswer == null) 
+            {
+                return NotFound();
+            }
+            return userAnswer;
         }
 
         // GET: api/UserAnswersForUser/5

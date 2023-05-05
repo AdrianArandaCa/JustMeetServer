@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using JustMeetWebService.Models;
 using NuGet.Packaging;
+using JustMeetWebService.Models2;
 
 namespace JustMeetWebService.Controllers
 {
@@ -41,6 +42,30 @@ namespace JustMeetWebService.Controllers
             }
             return await _context.Questions.ToListAsync();
         }
+        
+        [Route("api/questionsAnswers")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<QuestionAnswer>>> GetQuestionsAnswers()
+        {
+            List<QuestionAnswer> questionAnswer = new List<QuestionAnswer>();
+            List<Question> questions = null;
+            if (_context.Questions == null)
+            {
+                return NotFound();
+            }
+
+            questions = await _context.Questions.ToListAsync();
+            foreach (var q in questions)
+            {
+                var questionanswer = await _context.Questions.Where(a => a.IdQuestion == q.IdQuestion).SelectMany(a => a.IdAnswers).ToListAsync();
+                foreach (var answer in questionanswer)
+                {
+                    QuestionAnswer qAnswer = new QuestionAnswer(q.IdQuestion, answer.IdAnswer);
+                    questionAnswer.Add(qAnswer);
+                }
+            }
+            return questionAnswer;
+        }
 
         // GET: api/Questions/5
         [Route("api/question/{id}")]
@@ -51,7 +76,11 @@ namespace JustMeetWebService.Controllers
             {
                 return NotFound();
             }
-            var question = await _context.Questions.FindAsync(id);
+            Question question = new Question();
+            question = await _context.Questions.FindAsync(id);
+            var result = await GetQuestionWithAnswer(question.IdQuestion);
+            question.IdAnswers = result.Value;
+            
 
             if (question == null)
             {
@@ -123,6 +152,20 @@ namespace JustMeetWebService.Controllers
                 return Problem("Entity set 'JustmeetContext.Questions'  is null.");
             }
             _context.Questions.Add(question);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetQuestion", new { id = question.IdQuestion }, question);
+        }
+        [Route("api/questionAnswerTable")]
+        [HttpPost]
+        public async Task<ActionResult<Question>> PostQuestionAnswerTable(Question question)
+        {
+            if (_context.Questions == null)
+            {
+                return Problem("Entity set 'JustmeetContext.Questions'  is null.");
+            }
+            //var answer = await _context.Answers.FindAsync(question.IdAnswers);
+            //answer.Questions.Add(question);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetQuestion", new { id = question.IdQuestion }, question);
