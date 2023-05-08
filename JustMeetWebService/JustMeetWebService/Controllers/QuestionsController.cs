@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using JustMeetWebService.Models;
 using NuGet.Packaging;
-using JustMeetWebService.Models2;
 
 namespace JustMeetWebService.Controllers
 {
@@ -119,7 +118,10 @@ namespace JustMeetWebService.Controllers
             {
                 return BadRequest();
             }
-
+            //foreach (var q in question.IdAnswers)
+            //{
+            //    _context.Entry(q).State = EntityState.Unchanged;
+            //}
             _context.Entry(question).State = EntityState.Modified;
 
             try
@@ -129,6 +131,36 @@ namespace JustMeetWebService.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!QuestionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [Route("api/questionAnswerTable")]
+        [HttpPut]
+        public async Task<ActionResult<Question>> PutQuestionAnswerTable(Question question)
+        {
+            Question newManyToMany = _context.Questions.Find(question.IdQuestion);
+            if (newManyToMany != null)
+            {
+                newManyToMany.IdAnswers = question.IdAnswers;
+                _context.Entry(newManyToMany).State = EntityState.Modified;
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!QuestionExists(question.IdQuestion))
                 {
                     return NotFound();
                 }
@@ -156,20 +188,7 @@ namespace JustMeetWebService.Controllers
 
             return CreatedAtAction("GetQuestion", new { id = question.IdQuestion }, question);
         }
-        [Route("api/questionAnswerTable")]
-        [HttpPost]
-        public async Task<ActionResult<Question>> PostQuestionAnswerTable(Question question)
-        {
-            if (_context.Questions == null)
-            {
-                return Problem("Entity set 'JustmeetContext.Questions'  is null.");
-            }
-            //var answer = await _context.Answers.FindAsync(question.IdAnswers);
-            //answer.Questions.Add(question);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetQuestion", new { id = question.IdQuestion }, question);
-        }
+        
 
         // DELETE: api/Questions/5
         [Route("api/question/{id}")]

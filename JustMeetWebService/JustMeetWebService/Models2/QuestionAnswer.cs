@@ -1,4 +1,4 @@
-﻿namespace JustMeetWebService.Models2
+﻿namespace JustMeetWebService.Models
 {
     public partial class QuestionAnswer
     {
