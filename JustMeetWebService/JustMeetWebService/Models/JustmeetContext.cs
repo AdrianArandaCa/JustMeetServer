@@ -25,6 +25,8 @@ public partial class JustmeetContext : DbContext
 
     public virtual DbSet<Question> Questions { get; set; }
 
+    public virtual DbSet<QuestionAnswer> QuestionAnswers { get; set; }
+
     public virtual DbSet<Setting> Settings { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -131,25 +133,29 @@ public partial class JustmeetContext : DbContext
             entity.HasOne(d => d.IdGametypeNavigation).WithMany(p => p.Questions)
                 .HasForeignKey(d => d.IdGametype)
                 .HasConstraintName("FK_Question_Gametype");
+        });
 
-            entity.HasMany(d => d.IdAnswers).WithMany(p => p.IdQuestions)
-                .UsingEntity<Dictionary<string, object>>(
-                    "QuestionAnswer",
-                    r => r.HasOne<Answer>().WithMany()
-                        .HasForeignKey("IdAnswer")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_QuestionAnswer_Answer"),
-                    l => l.HasOne<Question>().WithMany()
-                        .HasForeignKey("IdQuestion")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_QuestionAnswer_Question"),
-                    j =>
-                    {
-                        j.HasKey("IdQuestion", "IdAnswer");
-                        j.ToTable("QuestionAnswer");
-                        j.IndexerProperty<int>("IdQuestion").HasColumnName("idQuestion");
-                        j.IndexerProperty<int>("IdAnswer").HasColumnName("idAnswer");
-                    });
+        modelBuilder.Entity<QuestionAnswer>(entity =>
+        {
+            entity.HasKey(e => new { e.IdQuestion, e.IdAnswer });
+
+            entity.ToTable("QuestionAnswer");
+
+            entity.Property(e => e.IdQuestion).HasColumnName("idQuestion");
+            entity.Property(e => e.IdAnswer).HasColumnName("idAnswer");
+            entity.Property(e => e.Exist)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("exist");
+
+            entity.HasOne(d => d.IdAnswerNavigation).WithMany(p => p.QuestionAnswers)
+                .HasForeignKey(d => d.IdAnswer)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_QuestionAnswer_Answer");
+
+            entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionAnswers)
+                .HasForeignKey(d => d.IdQuestion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_QuestionAnswer_Question");
         });
 
         modelBuilder.Entity<Setting>(entity =>
@@ -187,8 +193,7 @@ public partial class JustmeetContext : DbContext
 
             entity.Property(e => e.IdUser).HasColumnName("idUser");
             entity.Property(e => e.Birthday)
-                .HasMaxLength(255)
-                .IsUnicode(false)
+                .HasDefaultValueSql("((18))")
                 .HasColumnName("birthday");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Email)
@@ -230,12 +235,12 @@ public partial class JustmeetContext : DbContext
 
             entity.HasOne(d => d.IdAnswerNavigation).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => d.IdAnswer)
-                .HasConstraintName("FK__userAnswe__idAns__628FA481");
+                .HasConstraintName("FK__userAnswe__idAns__44CA3770");
 
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => d.IdQuestion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__userAnswe__idQue__619B8048");
+                .HasConstraintName("FK__userAnswe__idQue__45BE5BA9");
 
             entity.HasOne(d => d.Id).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => new { d.IdGame, d.IdUser })

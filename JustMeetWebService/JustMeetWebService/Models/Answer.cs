@@ -11,7 +11,7 @@ public partial class Answer
 
     public bool? Selected { get; set; }
 
-    public virtual ICollection<UserAnswer> UserAnswers { get; set; } = new List<UserAnswer>();
+    //public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; } = new List<QuestionAnswer>();
 
-    public virtual ICollection<Question> IdQuestions { get; set; } = new List<Question>();
+    //public virtual ICollection<UserAnswer> UserAnswers { get; set; } = new List<UserAnswer>();
 }

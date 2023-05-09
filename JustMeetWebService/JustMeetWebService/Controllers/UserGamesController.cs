@@ -25,10 +25,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserGame>>> GetUserGames()
         {
-          if (_context.UserGames == null)
-          {
-              return NotFound();
-          }
+            if (_context.UserGames == null)
+            {
+                return NotFound();
+            }
             return await _context.UserGames.ToListAsync();
         }
 
@@ -37,10 +37,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet()]
         public async Task<ActionResult<UserGame>> GetUserGame(int id)
         {
-          if (_context.UserGames == null)
-          {
-              return NotFound();
-          }
+            if (_context.UserGames == null)
+            {
+                return NotFound();
+            }
             var userGame = await _context.UserGames.FindAsync(id);
 
             if (userGame == null)
@@ -61,17 +61,19 @@ namespace JustMeetWebService.Controllers
             {
                 return NotFound();
             }
-            List<Game> listGame = await _context.UserGames.Where(a => a.IdUser == idUser).Select(a => a.IdGameNavigation).Where(a=>a.Match == true).ToListAsync();
-            if (listGame != null) {
+            List<Game> listGame = await _context.UserGames.Where(a => a.IdUser == idUser).Select(a => a.IdGameNavigation).Where(a => a.Match == true).ToListAsync();
+            if (listGame != null)
+            {
                 foreach (var game in listGame)
                 {
                     User user = await _context.UserGames.Where(a => a.IdGame == game.IdGame && a.IdUser != idUser).Select(a => a.IdUserNavigation).Distinct().FirstOrDefaultAsync();
-                    if (!userGame.Contains(user)) {
+                    if (!userGame.Contains(user))
+                    {
                         userGame.Add(user);
                     }
                 }
             }
-            
+
             if (userGame == null)
             {
                 return NotFound();
@@ -118,10 +120,10 @@ namespace JustMeetWebService.Controllers
         [HttpPost]
         public async Task<ActionResult<UserGame>> PostUserGame(UserGame userGame)
         {
-          if (_context.UserGames == null)
-          {
-              return Problem("Entity set 'JustmeetContext.UserGames'  is null.");
-          }
+            if (_context.UserGames == null)
+            {
+                return Problem("Entity set 'JustmeetContext.UserGames'  is null.");
+            }
             _context.UserGames.Add(userGame);
             try
             {

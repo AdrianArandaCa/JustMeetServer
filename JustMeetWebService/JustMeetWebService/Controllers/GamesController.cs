@@ -24,10 +24,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Game>>> GetGames()
         {
-          if (_context.Games == null)
-          {
-              return NotFound();
-          }
+            if (_context.Games == null)
+            {
+                return NotFound();
+            }
             return await _context.Games.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet()]
         public async Task<ActionResult<Game>> GetGame(int id)
         {
-          if (_context.Games == null)
-          {
-              return NotFound();
-          }
+            if (_context.Games == null)
+            {
+                return NotFound();
+            }
             var game = await _context.Games.FindAsync(id);
 
             if (game == null)
@@ -59,7 +59,7 @@ namespace JustMeetWebService.Controllers
             {
                 return NotFound();
             }
-            List<User> users = await _context.Games.Where(a=>a.IdGame == id).SelectMany(a=>a.UserGames).Select(a=>a.IdUserNavigation).ToListAsync();
+            List<User> users = await _context.Games.Where(a => a.IdGame == id).SelectMany(a => a.UserGames).Select(a => a.IdUserNavigation).ToListAsync();
 
             if (users == null)
             {
@@ -107,13 +107,13 @@ namespace JustMeetWebService.Controllers
         [HttpPost]
         public async Task<Game> PostGame(Game game)
         {
-          if (_context.Games == null)
-          {
-              //return Problem("Entity set 'JustmeetContext.Games'  is null.");
-          }
+            if (_context.Games == null)
+            {
+                //return Problem("Entity set 'JustmeetContext.Games'  is null.");
+            }
             _context.Games.Add(game);
             await _context.SaveChangesAsync();
-            game = await _context.Games.OrderByDescending(a=>a.IdGame).FirstOrDefaultAsync();
+            game = await _context.Games.OrderByDescending(a => a.IdGame).FirstOrDefaultAsync();
 
             return game;
         }

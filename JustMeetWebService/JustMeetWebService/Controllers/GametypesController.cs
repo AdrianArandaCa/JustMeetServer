@@ -24,10 +24,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Gametype>>> GetGametypes()
         {
-          if (_context.Gametypes == null)
-          {
-              return NotFound();
-          }
+            if (_context.Gametypes == null)
+            {
+                return NotFound();
+            }
             return await _context.Gametypes.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet()]
         public async Task<ActionResult<Gametype>> GetGametype(int id)
         {
-          if (_context.Gametypes == null)
-          {
-              return NotFound();
-          }
+            if (_context.Gametypes == null)
+            {
+                return NotFound();
+            }
             var gametype = await _context.Gametypes.FindAsync(id);
 
             if (gametype == null)
@@ -88,10 +88,10 @@ namespace JustMeetWebService.Controllers
         [HttpPost]
         public async Task<ActionResult<Gametype>> PostGametype(Gametype gametype)
         {
-          if (_context.Gametypes == null)
-          {
-              return Problem("Entity set 'JustmeetContext.Gametypes'  is null.");
-          }
+            if (_context.Gametypes == null)
+            {
+                return Problem("Entity set 'JustmeetContext.Gametypes'  is null.");
+            }
             _context.Gametypes.Add(gametype);
             await _context.SaveChangesAsync();
 

@@ -24,10 +24,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Setting>>> GetSettings()
         {
-          if (_context.Settings == null)
-          {
-              return NotFound();
-          }
+            if (_context.Settings == null)
+            {
+                return NotFound();
+            }
             return await _context.Settings.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet()]
         public async Task<ActionResult<Setting>> GetSetting(int id)
         {
-          if (_context.Settings == null)
-          {
-              return NotFound();
-          }
+            if (_context.Settings == null)
+            {
+                return NotFound();
+            }
             var setting = await _context.Settings.FindAsync(id);
 
             if (setting == null)
@@ -88,10 +88,10 @@ namespace JustMeetWebService.Controllers
         [HttpPost]
         public async Task<ActionResult<Setting>> PostSetting(Setting setting)
         {
-          if (_context.Settings == null)
-          {
-              return Problem("Entity set 'JustmeetContext.Settings'  is null.");
-          }
+            if (_context.Settings == null)
+            {
+                return Problem("Entity set 'JustmeetContext.Settings'  is null.");
+            }
             _context.Settings.Add(setting);
             await _context.SaveChangesAsync();
 

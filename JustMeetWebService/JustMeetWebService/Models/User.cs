@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace JustMeetWebService.Models;
 
@@ -14,8 +13,6 @@ public partial class User
 
     public string? Email { get; set; }
 
-    public int? Birthday { get; set; }
-
     public string? Genre { get; set; }
 
     public int? Photo { get; set; }
@@ -26,9 +23,11 @@ public partial class User
 
     public int? IdSetting { get; set; }
 
+    public int? Birthday { get; set; }
+
     public virtual Setting? IdSettingNavigation { get; set; }
-    [JsonIgnore]
-    public virtual ICollection<Location> Locations { get; set; } = new List<Location>();
-    [JsonIgnore]
-    public virtual ICollection<UserGame> UserGames { get; set; } = new List<UserGame>();
+
+    //public virtual ICollection<Location> Locations { get; set; } = new List<Location>();
+
+    //public virtual ICollection<UserGame> UserGames { get; set; } = new List<UserGame>();
 }

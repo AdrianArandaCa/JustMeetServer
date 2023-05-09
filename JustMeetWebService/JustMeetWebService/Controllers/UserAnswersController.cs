@@ -26,24 +26,24 @@ namespace JustMeetWebService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserAnswer>>> GetUserAnswers()
         {
-          if (_context.UserAnswers == null)
-          {
-              return NotFound();
-          }
+            if (_context.UserAnswers == null)
+            {
+                return NotFound();
+            }
             return await _context.UserAnswers.ToListAsync();
         }
-        
+
         // GET: api/UserAnswers
         [Route("api/userAnswer/{idGame}/{idUser}/{idQuestion}")]
         [HttpGet]
         public async Task<ActionResult<UserAnswer>> GetUserAnswer(int idGame, int idUser, int idQuestion)
         {
-          if (_context.UserAnswers == null)
-          {
-              return NotFound();
-          }
+            if (_context.UserAnswers == null)
+            {
+                return NotFound();
+            }
             var userAnswer = await _context.UserAnswers.Where(a => a.IdGame == idGame && a.IdUser == idUser && a.IdQuestion == idQuestion).FirstOrDefaultAsync();
-            if (userAnswer == null) 
+            if (userAnswer == null)
             {
                 return NotFound();
             }
@@ -59,7 +59,7 @@ namespace JustMeetWebService.Controllers
             {
                 return NotFound();
             }
-            var listUserAnswer = await _context.UserAnswers.Where(a=>a.IdGame == idGame).ToListAsync();
+            var listUserAnswer = await _context.UserAnswers.Where(a => a.IdGame == idGame).ToListAsync();
 
             if (listUserAnswer == null)
             {
@@ -74,10 +74,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet()]
         public async Task<ActionResult<UserAnswer>> GetUserAnswerForUser(int idUser)
         {
-          if (_context.UserAnswers == null)
-          {
-              return NotFound();
-          }
+            if (_context.UserAnswers == null)
+            {
+                return NotFound();
+            }
             var userAnswer = await _context.UserAnswers.FindAsync(idUser);
 
             if (userAnswer == null)
@@ -140,10 +140,10 @@ namespace JustMeetWebService.Controllers
         [HttpPost]
         public async Task<ActionResult<UserAnswer>> PostUserAnswer(UserAnswer userAnswer)
         {
-          if (_context.UserAnswers == null)
-          {
-              return Problem("Entity set 'JustmeetContext.UserAnswers'  is null.");
-          }
+            if (_context.UserAnswers == null)
+            {
+                return Problem("Entity set 'JustmeetContext.UserAnswers'  is null.");
+            }
             _context.UserAnswers.Add(userAnswer);
             try
             {
@@ -181,11 +181,12 @@ namespace JustMeetWebService.Controllers
             }
             catch (DbUpdateException)
             {
-                
+
             }
 
-            foreach (var userAnswer in listUserAnswer) {
-                
+            foreach (var userAnswer in listUserAnswer)
+            {
+
                 _context.UserAnswers.Add(userAnswer);
             }
             try
@@ -194,7 +195,8 @@ namespace JustMeetWebService.Controllers
             }
             catch (DbUpdateException)
             {
-                foreach (var userAnswer in listUserAnswer) {
+                foreach (var userAnswer in listUserAnswer)
+                {
                     if (UserAnswerExists(userAnswer.IdGame, userAnswer.IdUser, userAnswer.IdQuestion))
                     {
                         return Conflict();

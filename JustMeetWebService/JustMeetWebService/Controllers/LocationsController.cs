@@ -24,10 +24,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
         {
-          if (_context.Locations == null)
-          {
-              return NotFound();
-          }
+            if (_context.Locations == null)
+            {
+                return NotFound();
+            }
             return await _context.Locations.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace JustMeetWebService.Controllers
         [HttpGet()]
         public async Task<ActionResult<Location>> GetLocation(int id)
         {
-          if (_context.Locations == null)
-          {
-              return NotFound();
-          }
+            if (_context.Locations == null)
+            {
+                return NotFound();
+            }
             var location = await _context.Locations.FindAsync(id);
 
             if (location == null)
@@ -58,7 +58,7 @@ namespace JustMeetWebService.Controllers
             {
                 return NotFound();
             }
-            var location = await _context.Locations.Where(a=>a.IdUser == id).FirstOrDefaultAsync();
+            var location = await _context.Locations.Where(a => a.IdUser == id).FirstOrDefaultAsync();
 
             if (location == null)
             {
@@ -74,7 +74,7 @@ namespace JustMeetWebService.Controllers
         [HttpPut()]
         public async Task<IActionResult> PutLocation(int id, Location location)
         {
-            
+
             if (id != location.IdLocation)
             {
                 return BadRequest();
@@ -107,10 +107,10 @@ namespace JustMeetWebService.Controllers
         [HttpPost]
         public async Task<ActionResult<Location>> PostLocation(Location location)
         {
-          if (_context.Locations == null)
-          {
-              return Problem("Entity set 'JustmeetContext.Locations'  is null.");
-          }
+            if (_context.Locations == null)
+            {
+                return Problem("Entity set 'JustmeetContext.Locations'  is null.");
+            }
             _context.Locations.Add(location);
             await _context.SaveChangesAsync();
 

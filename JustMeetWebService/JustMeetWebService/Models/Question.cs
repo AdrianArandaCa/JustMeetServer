@@ -13,9 +13,9 @@ public partial class Question
 
     public virtual Gametype? IdGametypeNavigation { get; set; }
 
-    public virtual ICollection<UserAnswer> UserAnswers { get; set; } = new List<UserAnswer>();
+    //public virtual ICollection<QuestionAnswer> QuestionAnswers { get; set; } = new List<QuestionAnswer>();
 
-    public virtual ICollection<Answer> IdAnswers { get; set; } = new List<Answer>();
+    public virtual ICollection<UserAnswer> UserAnswers { get; set; } = new List<UserAnswer>();
 
     public virtual ICollection<Game> IdGames { get; set; } = new List<Game>();
 }
