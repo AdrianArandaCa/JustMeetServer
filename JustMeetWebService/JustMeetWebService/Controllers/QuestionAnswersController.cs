@@ -9,7 +9,6 @@ using JustMeetWebService.Models;
 
 namespace JustMeetWebService.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class QuestionAnswersController : ControllerBase
     {
@@ -21,6 +20,7 @@ namespace JustMeetWebService.Controllers
         }
 
         // GET: api/QuestionAnswers
+        [Route("api/questionsAnswers")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<QuestionAnswer>>> GetQuestionAnswers()
         {
@@ -32,14 +32,15 @@ namespace JustMeetWebService.Controllers
         }
 
         // GET: api/QuestionAnswers/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<QuestionAnswer>> GetQuestionAnswer(int id)
+        [Route("api/questionAnswer/{idQuestion}/{idAnswer}")]
+        [HttpGet()]
+        public async Task<ActionResult<QuestionAnswer>> GetQuestionAnswer(int idQuestion, int idAnswer)
         {
             if (_context.QuestionAnswers == null)
             {
                 return NotFound();
             }
-            var questionAnswer = await _context.QuestionAnswers.FindAsync(id);
+            var questionAnswer = await _context.QuestionAnswers.Where(a => a.IdQuestion == idQuestion && a.IdAnswer == idAnswer).FirstOrDefaultAsync();
 
             if (questionAnswer == null)
             {
@@ -51,10 +52,11 @@ namespace JustMeetWebService.Controllers
 
         // PUT: api/QuestionAnswers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutQuestionAnswer(int id, QuestionAnswer questionAnswer)
+        [Route("api/questionAnswer/{idQuestion}/{idAnswer}")]
+        [HttpPut()]
+        public async Task<IActionResult> PutQuestionAnswer(int idQuestion, int idAnswer, QuestionAnswer questionAnswer)
         {
-            if (id != questionAnswer.IdQuestion)
+            if (idQuestion != questionAnswer.IdQuestion || idAnswer != questionAnswer.IdAnswer)
             {
                 return BadRequest();
             }
@@ -67,7 +69,7 @@ namespace JustMeetWebService.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!QuestionAnswerExists(id))
+                if (!QuestionAnswerExists(idQuestion) || !QuestionAnswerByAnswerExists(idAnswer))
                 {
                     return NotFound();
                 }
@@ -82,7 +84,8 @@ namespace JustMeetWebService.Controllers
 
         // POST: api/QuestionAnswers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [Route("api/questionAnswer")]
+        [HttpPost()]
         public async Task<ActionResult<QuestionAnswer>> PostQuestionAnswer(QuestionAnswer questionAnswer)
         {
             if (_context.QuestionAnswers == null)
@@ -110,14 +113,15 @@ namespace JustMeetWebService.Controllers
         }
 
         // DELETE: api/QuestionAnswers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteQuestionAnswer(int id)
+        [Route("api/questionAnswer/{idQuestion}/{idAnswer}")]
+        [HttpDelete()]
+        public async Task<IActionResult> DeleteQuestionAnswer(int idQuestion, int idAnswer)
         {
             if (_context.QuestionAnswers == null)
             {
                 return NotFound();
             }
-            var questionAnswer = await _context.QuestionAnswers.FindAsync(id);
+            var questionAnswer = await _context.QuestionAnswers.Where(a => a.IdQuestion == idQuestion && a.IdAnswer == idAnswer).FirstOrDefaultAsync();
             if (questionAnswer == null)
             {
                 return NotFound();
@@ -132,6 +136,10 @@ namespace JustMeetWebService.Controllers
         private bool QuestionAnswerExists(int id)
         {
             return (_context.QuestionAnswers?.Any(e => e.IdQuestion == id)).GetValueOrDefault();
+        }
+        private bool QuestionAnswerByAnswerExists(int id)
+        {
+            return (_context.QuestionAnswers?.Any(e => e.IdAnswer == id)).GetValueOrDefault();
         }
     }
 }
