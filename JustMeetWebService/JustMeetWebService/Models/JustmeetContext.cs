@@ -41,6 +41,8 @@ public partial class JustmeetContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Latin1_General_CI_AS");
+
         modelBuilder.Entity<Answer>(entity =>
         {
             entity.HasKey(e => e.IdAnswer);
@@ -149,13 +151,11 @@ public partial class JustmeetContext : DbContext
 
             entity.HasOne(d => d.IdAnswerNavigation).WithMany(p => p.QuestionAnswers)
                 .HasForeignKey(d => d.IdAnswer)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_QuestionAnswer_Answer");
+                .HasConstraintName("fk_answer_questionAnswer");
 
             entity.HasOne(d => d.IdQuestionNavigation).WithMany(p => p.QuestionAnswers)
                 .HasForeignKey(d => d.IdQuestion)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_QuestionAnswer_Question");
+                .HasConstraintName("fk_question_questionAnswer");
         });
 
         modelBuilder.Entity<Setting>(entity =>
@@ -189,7 +189,7 @@ public partial class JustmeetContext : DbContext
         {
             entity.HasKey(e => e.IdUser);
 
-            entity.ToTable("User");
+            entity.ToTable("User", tb => tb.HasTrigger("trg_delete_user"));
 
             entity.Property(e => e.IdUser).HasColumnName("idUser");
             entity.Property(e => e.Birthday)
@@ -242,6 +242,10 @@ public partial class JustmeetContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__userAnswe__idQue__45BE5BA9");
 
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserAnswers)
+                .HasForeignKey(d => d.IdUser)
+                .HasConstraintName("fk_user_userAnswer");
+
             entity.HasOne(d => d.Id).WithMany(p => p.UserAnswers)
                 .HasForeignKey(d => new { d.IdGame, d.IdUser })
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -259,13 +263,11 @@ public partial class JustmeetContext : DbContext
 
             entity.HasOne(d => d.IdGameNavigation).WithMany(p => p.UserGames)
                 .HasForeignKey(d => d.IdGame)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserGame_Game");
+                .HasConstraintName("fk_game_userGame");
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserGames)
                 .HasForeignKey(d => d.IdUser)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserGame_User");
+                .HasConstraintName("fk_user_userGame");
         });
 
         OnModelCreatingPartial(modelBuilder);

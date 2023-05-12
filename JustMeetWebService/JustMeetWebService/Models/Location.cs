@@ -13,5 +13,5 @@ public partial class Location
 
     public int IdUser { get; set; }
 
-    //public virtual User? IdUserNavigation { get; set; } = null!;
+    //public virtual User IdUserNavigation { get; set; } = null!;
 }

@@ -15,8 +15,6 @@ public partial class User
 
     public string? Genre { get; set; }
 
-    //public int? Photo { get; set; }
-
     public string? Description { get; set; }
 
     public bool? Premium { get; set; }
@@ -25,9 +23,13 @@ public partial class User
 
     public int? Birthday { get; set; }
 
+    //public string? Photo { get; set; }
+
     public virtual Setting? IdSettingNavigation { get; set; }
 
     //public virtual ICollection<Location> Locations { get; set; } = new List<Location>();
+
+    public virtual ICollection<UserAnswer> UserAnswers { get; set; } = new List<UserAnswer>();
 
     //public virtual ICollection<UserGame> UserGames { get; set; } = new List<UserGame>();
 }
