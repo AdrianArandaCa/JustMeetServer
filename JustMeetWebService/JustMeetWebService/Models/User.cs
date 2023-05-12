@@ -15,7 +15,7 @@ public partial class User
 
     public string? Genre { get; set; }
 
-    public int? Photo { get; set; }
+    //public int? Photo { get; set; }
 
     public string? Description { get; set; }
 
