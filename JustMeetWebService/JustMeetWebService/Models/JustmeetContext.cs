@@ -205,6 +205,9 @@ public partial class JustmeetContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("genre");
             entity.Property(e => e.IdSetting).HasColumnName("idSetting");
+            entity.Property(e => e.IsConnected)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("isConnected");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");

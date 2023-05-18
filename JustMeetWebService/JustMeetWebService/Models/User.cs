@@ -25,6 +25,8 @@ public partial class User
 
     //public string? Photo { get; set; }
 
+    public bool? IsConnected { get; set; }
+
     public virtual Setting? IdSettingNavigation { get; set; }
 
     //public virtual ICollection<Location> Locations { get; set; } = new List<Location>();

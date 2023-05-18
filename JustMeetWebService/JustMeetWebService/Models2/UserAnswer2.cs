@@ -17,5 +17,7 @@ namespace JustMeetWebService.Models
         public virtual Answer? IdAnswerNavigation { get; set; }
         [JsonIgnore]
         public virtual Question? IdQuestionNavigation { get; set; } = null!;
+        [JsonIgnore]
+        public virtual User? IdUserNavigation { get; set; } = null!;
     }
 }

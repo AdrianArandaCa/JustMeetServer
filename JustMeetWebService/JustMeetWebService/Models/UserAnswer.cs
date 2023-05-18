@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace JustMeetWebService.Models;
@@ -19,6 +18,6 @@ public partial class UserAnswer
     //public virtual Answer? IdAnswerNavigation { get; set; }
 
     //public virtual Question IdQuestionNavigation { get; set; } = null!;
-    [JsonIgnore]
-    public virtual User? IdUserNavigation { get; set; } = null!;
+
+    //public virtual User IdUserNavigation { get; set; } = null!;
 }

@@ -202,6 +202,20 @@ namespace JustMeetWebService.Controllers
             return CreatedAtAction("GetQuestion", new { id = question.IdQuestion }, question);
         }
 
+        [Route("api/questions")]
+        [HttpPost]
+        public async Task<ActionResult<List<Question>>> PostQuestions(List<Question> questionList)
+        {
+            if (_context.Questions == null)
+            {
+                return Problem("Entity set 'JustmeetContext.Questions'  is null.");
+            }
+            _context.Questions.AddRange(questionList);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetQuestions", questionList);
+        }
+
 
         // DELETE: api/Questions/5
         [Route("api/question/{id}")]
