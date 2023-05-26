@@ -85,7 +85,7 @@ namespace JustMeetWebService.Controllers
         // POST: api/QuestionAnswers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Route("api/questionAnswer")]
-        [HttpPost()]
+        [HttpPost]
         public async Task<ActionResult<QuestionAnswer>> PostQuestionAnswer(QuestionAnswer questionAnswer)
         {
             if (_context.QuestionAnswers == null)

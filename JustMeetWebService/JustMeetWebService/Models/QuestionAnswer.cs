@@ -11,7 +11,7 @@ public partial class QuestionAnswer
 
     public bool? Exist { get; set; }
 
-    public virtual Answer IdAnswerNavigation { get; set; } = null!;
+    //public virtual Answer IdAnswerNavigation { get; set; } = null!;
 
-    public virtual Question IdQuestionNavigation { get; set; } = null!;
+    //public virtual Question IdQuestionNavigation { get; set; } = null!;
 }

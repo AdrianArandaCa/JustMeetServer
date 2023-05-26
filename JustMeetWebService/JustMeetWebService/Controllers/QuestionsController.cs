@@ -55,6 +55,24 @@ namespace JustMeetWebService.Controllers
             return questionsDTO;
         }
 
+        [Route("api/question/{id}")]
+        [HttpGet]
+        public async Task<ActionResult<Question>> GetQuestion(int id)
+        {
+            if (_context.Questions == null)
+            {
+                return NotFound();
+            }
+            var question = await _context.Questions.FindAsync(id);
+
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            return question;
+        }
+
         //[Route("api/questionsAnswers")]
         //[HttpGet]
         //public async Task<ActionResult<IEnumerable<QuestionAnswer>>> GetQuestionsAnswers()
